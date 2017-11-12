@@ -19,6 +19,7 @@ import org.ethereum.geth.Accounts;
 import org.ethereum.geth.Address;
 import org.ethereum.geth.BigInt;
 import org.ethereum.geth.Context;
+import org.ethereum.geth.SyncProgress;
 import org.ethereum.geth.Geth;
 import org.ethereum.geth.KeyStore;
 import org.ethereum.geth.Node;
@@ -39,6 +40,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
     private static final String NEW_ACCOUNT_ERROR = "NEW_ACCOUNT_ERROR";
     private static final String SET_ACCOUNT_ERROR = "SET_ACCOUNT_ERROR";
     private static final String GET_ACCOUNT_ERROR = "GET_ACCOUNT_ERROR";
+    private static final String SYNC_PROGRESS_ERROR = "SYNC_PROGRESS_ERROR";
     private static final String UPDATE_ACCOUNT_ERROR = "UPDATE_ACCOUNT_ERROR";
     private static final String DELETE_ACCOUNT_ERROR = "DELETE_ACCOUNT_ERROR";
     private static final String EXPORT_KEY_ERROR = "EXPORT_ACCOUNT_KEY_ERROR";
@@ -236,6 +238,36 @@ public class RNGethModule extends ReactContextBaseJavaModule {
             }
         } catch (Exception e) {
             promise.reject(GET_ACCOUNT_ERROR, e);
+        }
+    }
+
+    // Return sync progress
+    @ReactMethod
+    public void getSyncProgress(Promise promise) {
+        try {
+            Account acc = this.getAccount();
+            if (acc != null) {
+                Context ctx = new Context();
+                SyncProgress sp = this.getNode().getEthereumClient().syncProgress(ctx);
+
+                if (sp != null) {
+                    WritableMap syncProgress = new WritableNativeMap();
+                    syncProgress.putDouble("startingBlock", sp.getStartingBlock());
+                    syncProgress.putDouble("currentBlock", sp.getCurrentBlock());
+                    syncProgress.putDouble("highestBlock", sp.getHighestBlock());
+
+                    promise.resolve(syncProgress);
+                    return;
+                }
+
+                // Syncing has either not starter, or has already stopped.
+                promise.resolve(null);
+                return;
+            } else {
+                promise.reject(SYNC_PROGRESS_ERROR, "call method setAccount() before");
+            }
+        } catch (Exception e) {
+            promise.reject(SYNC_PROGRESS_ERROR, e);
         }
     }
 
