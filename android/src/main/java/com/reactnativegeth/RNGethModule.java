@@ -25,11 +25,14 @@ import org.ethereum.geth.KeyStore;
 import org.ethereum.geth.Node;
 import org.ethereum.geth.NodeConfig;
 import org.ethereum.geth.NewHeadHandler;
+import org.ethereum.geth.Header;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+
+import android.util.Log;
 
 
 public class RNGethModule extends ReactContextBaseJavaModule {
