@@ -24,6 +24,7 @@ import org.ethereum.geth.Geth;
 import org.ethereum.geth.KeyStore;
 import org.ethereum.geth.Node;
 import org.ethereum.geth.NodeConfig;
+import org.ethereum.geth.NewHeadHandler;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -41,6 +42,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
     private static final String SET_ACCOUNT_ERROR = "SET_ACCOUNT_ERROR";
     private static final String GET_ACCOUNT_ERROR = "GET_ACCOUNT_ERROR";
     private static final String SYNC_PROGRESS_ERROR = "SYNC_PROGRESS_ERROR";
+    private static final String SUBSCRIBE_NEW_HEAD_ERROR = "SUBSCRIBE_NEW_HEAD_ERROR";
     private static final String UPDATE_ACCOUNT_ERROR = "UPDATE_ACCOUNT_ERROR";
     private static final String DELETE_ACCOUNT_ERROR = "DELETE_ACCOUNT_ERROR";
     private static final String EXPORT_KEY_ERROR = "EXPORT_ACCOUNT_KEY_ERROR";
@@ -271,6 +273,34 @@ public class RNGethModule extends ReactContextBaseJavaModule {
         }
     }
 
+    // Return sync progress
+    @ReactMethod
+    public void subscribeNewHead(Promise promise) {
+        try {
+            Account acc = this.getAccount();
+            if (acc != null) {
+                NewHeadHandler handler = new NewHeadHandler() {
+                  @Override public void onError(String error) {
+                    Log.d("GETH", "New head error: " + error);
+                  }
+                  @Override public void onNewHead(final Header header) {
+                    Log.d("GETH", "New head: " + header.toString());
+                  }
+                };
+
+                Context ctx = new Context();
+                this.getNode().getEthereumClient().subscribeNewHead(ctx, handler, 16);
+                // Syncing has either not starter, or has already stopped.
+                promise.resolve(true);
+                return;
+            } else {
+                promise.reject(SUBSCRIBE_NEW_HEAD_ERROR, "call method setAccount() before");
+            }
+        } catch (Exception e) {
+            promise.reject(SUBSCRIBE_NEW_HEAD_ERROR, e);
+        }
+    }
+    
     // Update the passphrase of current account
     @ReactMethod
     public void updateAccount(String oldPassword, String newPassword, Promise promise) {
