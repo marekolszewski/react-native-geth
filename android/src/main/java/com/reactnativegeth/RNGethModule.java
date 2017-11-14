@@ -280,6 +280,17 @@ public class RNGethModule extends ReactContextBaseJavaModule {
         }
     }
 
+    private class MyNewHeadHandler extends NewHeadHandler {
+        @Override public void onError(String error) {
+            Log.d("GETH", "New head error: " + error);
+            headErrorCallback();
+        }
+        @Override public void onNewHead(final Header header) {
+            Log.d("GETH", "New head: " + header.toString());
+            headSuccessCallback();
+        }
+    }
+
     // Return sync progress
     @ReactMethod
     public void subscribeNewHead(Callback successCallback, Callback errorCallback) {
@@ -289,17 +300,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
         try {
             Account acc = this.getAccount();
             if (acc != null) {
-                NewHeadHandler handler = new NewHeadHandler() {
-                    @Override public void onError(String error) {
-                        Log.d("GETH", "New head error: " + error);
-                        headErrorCallback();
-                    }
-                    @Override public void onNewHead(final Header header) {
-                        Log.d("GETH", "New head: " + header.toString());
-                        headSuccessCallback();
-                    }
-                };
-
+                MyNewHeadHandler handler = new MyNewHeadHandler();
                 Context ctx = new Context();
                 this.getNode().getEthereumClient().subscribeNewHead(ctx, handler, 16);
                 return;
