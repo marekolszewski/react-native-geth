@@ -292,11 +292,11 @@ public class RNGethModule extends ReactContextBaseJavaModule {
                 NewHeadHandler handler = new NewHeadHandler() {
                     @Override public void onError(String error) {
                         Log.d("GETH", "New head error: " + error);
-                        RNGethModule.this.headErrorCallback();
+                        headErrorCallback();
                     }
                     @Override public void onNewHead(final Header header) {
                         Log.d("GETH", "New head: " + header.toString());
-                        RNGethModule.this.headSuccessCallback();
+                        headSuccessCallback();
                     }
                 };
 
