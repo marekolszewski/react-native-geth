@@ -293,27 +293,32 @@ public class RNGethModule extends ReactContextBaseJavaModule {
                     }
                     @Override public void onNewHead(final Header header) {
                         Log.d("GETH", "New head: " + header.toString());
-                        WritableMap map = new WritableNativeMap();
+                        WritableMap headerMap = new WritableNativeMap();
+                        WritableArray extraArray = new WritableNativeArray();
 
-                        map.putString("parentHash", header.getParentHash().getHex());
-                        map.putString("uncleHash", header.getUncleHash().getHex());
-                        map.putString("coinbase", header.getCoinbase().getHex());
-                        map.putString("root", header.getRoot().getHex());
-                        map.putString("TxHash", header.getTxHash().getHex());
-                        map.putString("receiptHash", header.getReceiptHash().getHex());
-                        map.putString("bloom", header.getBloom().getHex());
-                        map.putDouble("difficulty", (double) header.getDifficulty().getInt64());
-                        map.putDouble("number", (double) header.getNumber());
-                        map.putDouble("gasLimit", (double) header.getGasLimit());
-                        map.putDouble("gasUsed", (double) header.getGasUsed());
-                        map.putDouble("time", (double) header.getTime());
-                        map.putArray("extra", new WritableNativeArray(header.getExtra()));
-                        map.putString("mixDigest", header.getMixDigest().getHex());
-                        map.putString("nounce", header.getNonce().getHex());
-                        map.putString("hash", header.getHash().getHex());
+                        for (byte extraByte: header.getExtra()) {
+                          extraArray.pushInt(extraByte);
+                        }
+
+                        headerMap.putString("parentHash", header.getParentHash().getHex());
+                        headerMap.putString("uncleHash", header.getUncleHash().getHex());
+                        headerMap.putString("coinbase", header.getCoinbase().getHex());
+                        headerMap.putString("root", header.getRoot().getHex());
+                        headerMap.putString("TxHash", header.getTxHash().getHex());
+                        headerMap.putString("receiptHash", header.getReceiptHash().getHex());
+                        headerMap.putString("bloom", header.getBloom().getHex());
+                        headerMap.putDouble("difficulty", (double) header.getDifficulty().getInt64());
+                        headerMap.putDouble("number", (double) header.getNumber());
+                        headerMap.putDouble("gasLimit", (double) header.getGasLimit());
+                        headerMap.putDouble("gasUsed", (double) header.getGasUsed());
+                        headerMap.putDouble("time", (double) header.getTime());
+                        headerMap.putString("mixDigest", header.getMixDigest().getHex());
+                        headerMap.putString("nounce", header.getNonce().getHex());
+                        headerMap.putString("hash", header.getHash().getHex());
+                        headerMap.putArray("extra", extraArray);
 
                         reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                            .emit("GethNewHead", map);
+                            .emit("GethNewHead", headerMap);
                     }
                 };
 
