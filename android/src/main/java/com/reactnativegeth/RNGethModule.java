@@ -283,26 +283,24 @@ public class RNGethModule extends ReactContextBaseJavaModule {
             Account acc = this.getAccount();
             if (acc != null) {
                 NewHeadHandler handler = new NewHeadHandler() {
-                  @Override public void onError(String error) {
-                    Log.d("GETH", "New head error: " + error);
-                    errorCallback();
-                  }
-                  @Override public void onNewHead(final Header header) {
-                    Log.d("GETH", "New head: " + header.toString());
-                    successCallback();
-                  }
+                    @Override public void onError(String error) {
+                        Log.d("GETH", "New head error: " + error);
+                        errorCallback();
+                    }
+                    @Override public void onNewHead(final Header header) {
+                        Log.d("GETH", "New head: " + header.toString());
+                        successCallback();
+                    }
                 };
 
                 Context ctx = new Context();
                 this.getNode().getEthereumClient().subscribeNewHead(ctx, handler, 16);
-                // Syncing has either not starter, or has already stopped.
-                promise.resolve(true);
                 return;
             } else {
-                promise.reject(SUBSCRIBE_NEW_HEAD_ERROR, "call method setAccount() before");
+                errorCallback(SUBSCRIBE_NEW_HEAD_ERROR, "call method setAccount() before");
             }
         } catch (Exception e) {
-            promise.reject(SUBSCRIBE_NEW_HEAD_ERROR, e);
+            errorCallback(SUBSCRIBE_NEW_HEAD_ERROR, e);
         }
     }
     
