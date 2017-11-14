@@ -278,16 +278,18 @@ public class RNGethModule extends ReactContextBaseJavaModule {
 
     // Return sync progress
     @ReactMethod
-    public void subscribeNewHead(Promise promise) {
+    public void subscribeNewHead(Callback successCallback, Callback errorCallback) {
         try {
             Account acc = this.getAccount();
             if (acc != null) {
                 NewHeadHandler handler = new NewHeadHandler() {
                   @Override public void onError(String error) {
                     Log.d("GETH", "New head error: " + error);
+                    errorCallback();
                   }
                   @Override public void onNewHead(final Header header) {
                     Log.d("GETH", "New head: " + header.toString());
+                    successCallback();
                   }
                 };
 
