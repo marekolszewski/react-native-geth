@@ -61,12 +61,12 @@ public class RNGethModule extends ReactContextBaseJavaModule {
     private static NodeConfig ndConfig;
     private Account account;
     private KeyStore keyStore;
-
-    public Callback headSuccessCallback;
-    public Callback headErrorCallback;
+    private ReactApplicationContext reactContext;
 
     public RNGethModule(ReactApplicationContext reactContext) {
         super(reactContext);
+
+        this.reactContext = reactContext;
     }
 
     @Override
@@ -282,32 +282,30 @@ public class RNGethModule extends ReactContextBaseJavaModule {
 
     // Return sync progress
     @ReactMethod
-    public void subscribeNewHead(Callback successCallback, Callback errorCallback) {
-        this.headSuccessCallback = successCallback;
-        this.headErrorCallback = errorCallback;
-
+    public void subscribeNewHead(Promise promise) {
         try {
             Account acc = this.getAccount();
             if (acc != null) {
                 NewHeadHandler handler = new NewHeadHandler() {
                     @Override public void onError(String error) {
                         Log.d("GETH", "New head error: " + error);
-                        RNGethModule.this.headErrorCallback.invoke();
                     }
                     @Override public void onNewHead(final Header header) {
                         Log.d("GETH", "New head: " + header.toString());
-                        RNGethModule.this.headSuccessCallback.invoke();
+                        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                            .emit("GethNewHead", header.toString());
                     }
                 };
 
                 Context ctx = new Context();
                 this.getNode().getEthereumClient().subscribeNewHead(ctx, handler, 16);
+                promise.resolve(true);
                 return;
             } else {
-                errorCallback.invoke(SUBSCRIBE_NEW_HEAD_ERROR);
+                promise.reject(SUBSCRIBE_NEW_HEAD_ERROR, "call method setAccount() before");
             }
         } catch (Exception e) {
-            errorCallback.invoke(SUBSCRIBE_NEW_HEAD_ERROR);
+            promise.reject(SUBSCRIBE_NEW_HEAD_ERROR, e);
         }
     }
     
