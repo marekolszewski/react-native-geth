@@ -307,7 +307,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
                         map.putDouble("gasLimit", (double) header.getGasLimit());
                         map.putDouble("gasUsed", (double) header.getGasUsed());
                         map.putDouble("time", (double) header.getTime());
-                        map.putArray("extra", header.getExtra());
+                        map.putArray("extra", new WritableNativeArray(header.getExtra()));
                         map.putString("mixDigest", header.getMixDigest().getHex());
                         map.putString("nounce", header.getNonce().getHex());
                         map.putString("hash", header.getHash().getHex());
