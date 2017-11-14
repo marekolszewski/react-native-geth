@@ -14,7 +14,7 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
-import com.facebook.react.bridge.DeviceEventManagerModule;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import org.ethereum.geth.Account;
 import org.ethereum.geth.Accounts;
