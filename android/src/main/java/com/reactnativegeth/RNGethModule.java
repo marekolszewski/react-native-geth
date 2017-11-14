@@ -297,7 +297,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
 
                         map.putString("parentHash", header.getParentHash().getHex());
                         map.putString("uncleHash", header.getUncleHash().getHex());
-                        map.putString("coinbase", header.getCoinbase().getHex());
+                        map.putString("coinbase", header.getCoinbase().toString());
                         map.putString("root", header.getRoot().getHex());
                         map.putString("TxHash", header.getTxHash().getHex());
                         map.putString("receiptHash", header.getReceiptHash().getHex());
