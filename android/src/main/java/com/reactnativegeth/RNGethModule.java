@@ -293,8 +293,27 @@ public class RNGethModule extends ReactContextBaseJavaModule {
                     }
                     @Override public void onNewHead(final Header header) {
                         Log.d("GETH", "New head: " + header.toString());
+                        WritableMap map = new WritableNativeMap();
+
+                        map.putString("parentHash", header.getParentHash().getHex());
+                        map.putString("uncleHash", header.getUncleHash().getHex());
+                        map.putString("coinbase", header.getCoinbase().getHex());
+                        map.putString("root", header.getRoot().getHex());
+                        map.putString("TxHash", header.getTxHash().getHex());
+                        map.putString("receiptHash", header.getReceiptHash().getHex());
+                        map.putString("bloom", header.getBloom().getHex());
+                        map.putDouble("difficulty", (double) header.getDifficulty());
+                        map.putDouble("number", (double) header.getNumber());
+                        map.putDouble("gasLimit", (double) header.getGasLimit());
+                        map.putDouble("gasUsed", (double) header.getGasUsed());
+                        map.putDouble("time", (double) header.getTime());
+                        map.putString("extra", header.getExtra().toString());
+                        map.putString("mixDigest", header.getMixDigest().getHex());
+                        map.putString("nounce", header.getNonce().getHex());
+                        map.putString("hash", header.getHash().getHex());
+
                         reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                            .emit("GethNewHead", header.toString());
+                            .emit("GethNewHead", map);
                     }
                 };
 
