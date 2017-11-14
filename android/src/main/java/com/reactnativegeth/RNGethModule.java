@@ -272,7 +272,6 @@ public class RNGethModule extends ReactContextBaseJavaModule {
 
                 // Syncing has either not starter, or has already stopped.
                 promise.resolve(null);
-                return;
             } else {
                 promise.reject(SYNC_PROGRESS_ERROR, "call method setAccount() before");
             }
@@ -281,7 +280,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
         }
     }
 
-    // Return sync progress
+    // Start emitting GethNewHead events.
     @ReactMethod
     public void subscribeNewHead(Promise promise) {
         try {
@@ -289,10 +288,9 @@ public class RNGethModule extends ReactContextBaseJavaModule {
             if (acc != null) {
                 NewHeadHandler handler = new NewHeadHandler() {
                     @Override public void onError(String error) {
-                        Log.d("GETH", "New head error: " + error);
+                        Log.e("GETH", "Error emitting new head event: " + error);
                     }
                     @Override public void onNewHead(final Header header) {
-                        Log.d("GETH", "New head: " + header.toString());
                         WritableMap headerMap = new WritableNativeMap();
                         WritableArray extraArray = new WritableNativeArray();
 
@@ -325,7 +323,6 @@ public class RNGethModule extends ReactContextBaseJavaModule {
                 Context ctx = new Context();
                 this.getNode().getEthereumClient().subscribeNewHead(ctx, handler, 16);
                 promise.resolve(true);
-                return;
             } else {
                 promise.reject(SUBSCRIBE_NEW_HEAD_ERROR, "call method setAccount() before");
             }
