@@ -62,6 +62,9 @@ public class RNGethModule extends ReactContextBaseJavaModule {
     private Account account;
     private KeyStore keyStore;
 
+    public Callback headSuccessCallback;
+    public Callback headErrorCallback;
+
     public RNGethModule(ReactApplicationContext reactContext) {
         super(reactContext);
     }
@@ -280,17 +283,20 @@ public class RNGethModule extends ReactContextBaseJavaModule {
     // Return sync progress
     @ReactMethod
     public void subscribeNewHead(Callback successCallback, Callback errorCallback) {
+        this.headSuccessCallback = successCallback;
+        this.headErrorCallback = errorCallback;
+
         try {
             Account acc = this.getAccount();
             if (acc != null) {
                 NewHeadHandler handler = new NewHeadHandler() {
                     @Override public void onError(String error) {
                         Log.d("GETH", "New head error: " + error);
-                        Parent.errorCallback();
+                        RNGethModule.this.headErrorCallback();
                     }
                     @Override public void onNewHead(final Header header) {
                         Log.d("GETH", "New head: " + header.toString());
-                        Parent.successCallback();
+                        RNGethModule.this.headSuccessCallback();
                     }
                 };
 
