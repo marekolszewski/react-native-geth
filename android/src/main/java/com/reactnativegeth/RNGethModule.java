@@ -297,10 +297,10 @@ public class RNGethModule extends ReactContextBaseJavaModule {
                 this.getNode().getEthereumClient().subscribeNewHead(ctx, handler, 16);
                 return;
             } else {
-                errorCallback(SUBSCRIBE_NEW_HEAD_ERROR, "call method setAccount() before");
+                errorCallback(SUBSCRIBE_NEW_HEAD_ERROR);
             }
         } catch (Exception e) {
-            errorCallback(SUBSCRIBE_NEW_HEAD_ERROR, e);
+            errorCallback(SUBSCRIBE_NEW_HEAD_ERROR);
         }
     }
     
