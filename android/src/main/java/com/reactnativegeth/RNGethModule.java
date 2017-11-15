@@ -424,10 +424,10 @@ public class RNGethModule extends ReactContextBaseJavaModule {
         try {
             KeyStore ks = this.getKeyStore();
             Account signer = this.getAccount();
-            BigInt chain = ndConfig.ethereumNetworkID; // Chain identifier 
+            BigInt chain = ndConfig.networkID; // Chain identifier 
 
             Transaction tx = new Transaction(
-                new BigInt((long) nonce), 
+                (long) nonce, 
                 new Address(address),
                 new BigInt((long) amount), 
                 new BigInt((long) gasLimit), 
@@ -438,7 +438,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
             Transaction signed = ks.signTx(signer, tx, chain);
 
             Context ctx = new Context();
-            this.getNode().getEthereumClient().sendTransaction(signed, ctx);
+            this.getNode().getEthereumClient().sendTransaction(ctx, signed);
 
             Log.d("GETH", "New transaction: " + tx.toString());
             Log.d("GETH", "Signed version: " + signed.toString());
