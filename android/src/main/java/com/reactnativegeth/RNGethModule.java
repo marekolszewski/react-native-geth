@@ -54,6 +54,8 @@ public class RNGethModule extends ReactContextBaseJavaModule {
     private static final String EXPORT_KEY_ERROR = "EXPORT_ACCOUNT_KEY_ERROR";
     private static final String IMPORT_KEY_ERROR = "IMPORT_ACCOUNT_KEY_ERROR";
     private static final String GET_ACCOUNTS_ERROR = "GET_ACCOUNTS_ERROR";
+    private static final String NEW_TRANSACTION_ERROR = "NEW_TRANSACTION_ERROR";
+    private static final String SUGGEST_GAS_PRICE_ERROR = "SUGGEST_GAS_PRICE_ERROR";
     private static final String ETH_DIR = ".ethereum";
     private static final String KEY_STORE_DIR = "keystore";
     private static final String STATIC_NODES_FILES_PATH = "/" + ETH_DIR + "/GethDroid/";
@@ -446,7 +448,19 @@ public class RNGethModule extends ReactContextBaseJavaModule {
             promise.resolve(tx.toString());
 
         } catch (Exception e) {
-            promise.reject(GET_ACCOUNTS_ERROR, e);
+            promise.reject(NEW_TRANSACTION_ERROR, e);
+        }
+    }
+
+    @ReactMethod
+    public void suggestGasPrice(Promise promise) {
+        try {
+            Context ctx = new Context();
+            long gasPrice = this.getNode().getEthereumClient().SuggestGasPrice(ctx).getInt64();
+            promise.resolve((double) gasPrice);
+
+        } catch (Exception e) {
+            promise.reject(SUGGEST_GAS_PRICE_ERROR, e);
         }
     }
 }
