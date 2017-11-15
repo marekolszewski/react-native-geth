@@ -418,8 +418,8 @@ public class RNGethModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void createAndSendTransaction(double nonce, String address, double amount, double gasLimit, double gasPrice, 
-            Promise promise) {
+    public void createAndSendTransaction(String passphrase, double nonce, String address, double amount, 
+            double gasLimit, double gasPrice, Promise promise) {
 
         try {
             KeyStore ks = this.getKeyStore();
@@ -435,7 +435,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
                 null);
 
             // Sign a transaction with a single authorization
-            Transaction signed = ks.signTx(signer, tx, chain);
+            Transaction signed = ks.signTxPassphrase(signer, passphrase tx, chain);
 
             Context ctx = new Context();
             this.getNode().getEthereumClient().sendTransaction(ctx, signed);
