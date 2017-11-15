@@ -421,7 +421,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
     public void createAndSendTransaction(double nonce, String address, double amount, double gasLimit, double gasPrice, 
             Promise promise) {
 
-        Log.d(ndConfig.toString());
+        Log.d("GETH", ndConfig.toString());
         promise.resolve(true);
 
         /*
