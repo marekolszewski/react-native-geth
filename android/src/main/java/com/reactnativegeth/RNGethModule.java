@@ -28,6 +28,7 @@ import org.ethereum.geth.Node;
 import org.ethereum.geth.NodeConfig;
 import org.ethereum.geth.NewHeadHandler;
 import org.ethereum.geth.Header;
+import org.ethereum.geth.Transaction;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -423,14 +424,14 @@ public class RNGethModule extends ReactContextBaseJavaModule {
         try {
             KeyStore ks = this.getKeyStore();
             Account signer = this.getAccount();
-            BigInt chain = ndConfig.EthereumNetworkID; // Chain identifier 
+            BigInt chain = ndConfig.ethereumNetworkID; // Chain identifier 
 
             Transaction tx = new Transaction(
-                new BigInt(nonce), 
+                new BigInt((long) nonce), 
                 new Address(address),
-                new BigInt(amount), 
-                new BigInt(gasLimit), 
-                new BigInt(gasPrice), 
+                new BigInt((long) amount), 
+                new BigInt((long) gasLimit), 
+                new BigInt((long) gasPrice), 
                 null);
 
             // Sign a transaction with a single authorization
