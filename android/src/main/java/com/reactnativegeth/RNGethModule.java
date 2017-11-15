@@ -416,6 +416,38 @@ public class RNGethModule extends ReactContextBaseJavaModule {
         }
     }
 
+    @ReactMethod
+    public void createAndSendTransaction(double nonce, String address, double amount, double gasLimit, double gasPrice, 
+            Promise promise) {
+
+        try {
+            KeyStore ks = this.getKeyStore();
+            Account signer = this.getAccount();
+            BigInt chain = ndConfig.EthereumNetworkID; // Chain identifier 
+
+            Transaction tx = new Transaction(
+                new BigInt(nonce), 
+                new Address(address),
+                new BigInt(amount), 
+                new BigInt(gasLimit), 
+                new BigInt(gasPrice), 
+                null);
+
+            // Sign a transaction with a single authorization
+            Transaction signed = ks.signTx(signer, tx, chain);
+
+            Context ctx = new Context();
+            this.getNode().getEthereumClient().sendTransaction(signed, ctx);
+
+            Log.d("GETH", "New transaction: " + tx.toString());
+            Log.d("GETH", "Signed version: " + signed.toString());
+
+            promise.resolve(tx.toString());
+
+        } catch (Exception e) {
+            promise.reject(GET_ACCOUNTS_ERROR, e);
+        }
+    }
 }
 
     /*
