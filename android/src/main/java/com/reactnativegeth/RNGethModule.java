@@ -435,7 +435,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
                 null);
 
             // Sign a transaction with a single authorization
-            Transaction signed = ks.signTxPassphrase(signer, passphrase tx, chain);
+            Transaction signed = ks.signTxPassphrase(signer, passphrase, tx, chain);
 
             Context ctx = new Context();
             this.getNode().getEthereumClient().sendTransaction(ctx, signed);
