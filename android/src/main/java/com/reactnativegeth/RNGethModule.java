@@ -456,7 +456,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
     public void suggestGasPrice(Promise promise) {
         try {
             Context ctx = new Context();
-            long gasPrice = this.getNode().getEthereumClient().SuggestGasPrice(ctx).getInt64();
+            long gasPrice = this.getNode().getEthereumClient().suggestGasPrice(ctx).getInt64();
             promise.resolve((double) gasPrice);
 
         } catch (Exception e) {
