@@ -420,20 +420,20 @@ public class RNGethModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void createAndSendTransaction(String passphrase, String address, double amount, double gasLimit, 
+    public void createAndSendTransaction(String passphrase, String toAddress, double amount, double gasLimit, 
         double gasPrice, Promise promise) {
 
         try {
             KeyStore ks = this.getKeyStore();
             Account acc = this.getAccount();
-            Address address = acc.getAddress();
+            Address fromAddress = acc.getAddress();
             BigInt chain = new BigInt(ndConfig.getEthereumNetworkID());
             Context ctx = new Context();
-            long nonce = this.getNode().getEthereumClient().getPendingNonceAt(ctx, address);
+            long nonce = this.getNode().getEthereumClient().getPendingNonceAt(ctx, fromAddress);
 
             Transaction tx = new Transaction(
                 nonce, 
-                new Address(address),
+                new Address(toAddress),
                 new BigInt((long) amount), 
                 new BigInt((long) gasLimit), 
                 new BigInt((long) gasPrice), 
