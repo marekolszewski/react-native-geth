@@ -421,6 +421,10 @@ public class RNGethModule extends ReactContextBaseJavaModule {
     public void createAndSendTransaction(double nonce, String address, double amount, double gasLimit, double gasPrice, 
             Promise promise) {
 
+        Log.d(ndConfig.toString());
+        promise.resolve(true);
+
+        /*
         try {
             KeyStore ks = this.getKeyStore();
             Account signer = this.getAccount();
@@ -448,6 +452,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
         } catch (Exception e) {
             promise.reject(GET_ACCOUNTS_ERROR, e);
         }
+        */
     }
 }
 
