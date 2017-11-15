@@ -424,7 +424,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
         try {
             KeyStore ks = this.getKeyStore();
             Account signer = this.getAccount();
-            BigInt chain = ndConfig.networkID; // Chain identifier 
+            BigInt chain = ndConfig.NetworkID; // Chain identifier 
 
             Transaction tx = new Transaction(
                 (long) nonce, 
