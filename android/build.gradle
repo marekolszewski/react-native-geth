@@ -31,5 +31,6 @@ repositories {
 
 dependencies {
     compile "com.facebook.react:react-native:+"  // From node_modules
-    compile 'org.ethereum:geth:1.7.1'
+    compile files('/Users/marek/dev/go-ethereum/build/bin/geth.aar')
+    // compile 'org.ethereum:geth:1.7.1'
 }
