@@ -27,10 +27,14 @@ android {
 
 repositories {
     mavenCentral()
+
+    flatDir {
+        dirs "/Users/marek/dev/go-ethereum/build/bin/"
+    }
 }
 
 dependencies {
     compile "com.facebook.react:react-native:+"  // From node_modules
-    compile files('/Users/marek/dev/go-ethereum/build/bin/geth.aar')
+    compile(name: "geth", ext:"aar")
     // compile 'org.ethereum:geth:1.7.1'
 }
