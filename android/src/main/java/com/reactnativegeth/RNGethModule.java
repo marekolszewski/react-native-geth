@@ -442,7 +442,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
             // Send it out to the network.
             this.getNode().getEthereumClient().sendTransaction(ctx, signed);
 
-            Log.d("GETH". signed.toString());
+            Log.d("GETH", signed.toString());
 
             promise.resolve(tx.toString());
         } catch (Exception e) {
