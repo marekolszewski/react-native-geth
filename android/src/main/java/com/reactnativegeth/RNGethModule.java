@@ -443,7 +443,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
             Address fromAddress = acc.getAddress();
             long nonce = this.getNode().getEthereumClient().getPendingNonceAt(ctx, fromAddress);
 
-            return createAndSendTransaction(passphrase, toAddress, amount, gasLimit, gasPrice, data, 
+            createAndSendTransaction(passphrase, toAddress, amount, gasLimit, gasPrice, data, 
                 (double) nonce, promise);
         } catch (Exception e) {
             promise.reject(NEW_TRANSACTION_ERROR, e);
