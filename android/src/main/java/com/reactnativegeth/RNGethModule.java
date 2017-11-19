@@ -433,22 +433,22 @@ public class RNGethModule extends ReactContextBaseJavaModule {
 
     // Create and send transaction and
     // return transaction string
-    @ReactMethod
-    public void createAndSendTransaction(String passphrase, String toAddress, double amount,
-                                         double gasLimit, double gasPrice, String data, 
-                                         Promise promise) {
-        try {
-            Account acc = this.getAccount();
-            Context ctx = new Context();
-            Address fromAddress = acc.getAddress();
-            long nonce = this.getNode().getEthereumClient().getPendingNonceAt(ctx, fromAddress);
-
-            createAndSendTransaction(passphrase, toAddress, amount, gasLimit, gasPrice, data, 
-                (double) nonce, promise);
-        } catch (Exception e) {
-            promise.reject(NEW_TRANSACTION_ERROR, e);
-        }
-    }
+//   @ReactMethod
+//   public void createAndSendTransaction(String passphrase, String toAddress, double amount,
+//                                        double gasLimit, double gasPrice, String data, 
+//                                        Promise promise) {
+//       try {
+//           Account acc = this.getAccount();
+//           Context ctx = new Context();
+//           Address fromAddress = acc.getAddress();
+//           long nonce = this.getNode().getEthereumClient().getPendingNonceAt(ctx, fromAddress);
+//
+//           createAndSendTransaction(passphrase, toAddress, amount, gasLimit, gasPrice, data, 
+//               (double) nonce, promise);
+//       } catch (Exception e) {
+//           promise.reject(NEW_TRANSACTION_ERROR, e);
+//       }
+//   }
 
     // Create and send transaction and
     // return transaction string
