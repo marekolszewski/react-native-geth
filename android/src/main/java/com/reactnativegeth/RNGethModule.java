@@ -416,50 +416,22 @@ public class RNGethModule extends ReactContextBaseJavaModule {
         }
     }
 
-    // Gets this account's pending nonce. This is the nonce you should use when creating a transaction.
-    @ReactMethod
-    public void getPendingNonce(Promise promise) {
-        try {
-            Account acc = this.getAccount();
-            Context ctx = new Context();
-            Address address = acc.getAddress();
-            long nonce = this.getNode().getEthereumClient().getPendingNonceAt(ctx, address);
-
-            promise.resolve((double) nonce);
-        } catch (Exception e) {
-            promise.reject(GET_NONCE_ERROR, e);
-        }
-    }
-
-    // Create and send transaction and
-    // return transaction string
- //  @ReactMethod
- //  public void createAndSendTransaction(String passphrase, String toAddress, double amount,
- //                                       double gasLimit, double gasPrice, String data, 
- //                                       Promise promise) {
- //      try {
- //          Account acc = this.getAccount();
- //          Context ctx = new Context();
- //          Address fromAddress = acc.getAddress();
- //          long nonce = this.getNode().getEthereumClient().getPendingNonceAt(ctx, fromAddress);
- //  
- //          //createAndSendTransaction(passphrase, toAddress, amount, gasLimit, gasPrice, data, 
- //          //    (double) nonce, promise);
- //      } catch (Exception e) {
- //          promise.reject(NEW_TRANSACTION_ERROR, e);
- //      }
- //  }
-
-    // Create and send transaction and
+    // Create and send a transaction. Use -1 in the nonce field if you want to use the current 
+    // pending nonce.
     // return transaction string
     @ReactMethod
-    public void createAndSendTransaction(String passphrase, String toAddress, double amount,
-                                         double gasLimit, double gasPrice, String data, 
-                                         Double nonce, Promise promise) {
+    public void createAndSendTransaction(String passphrase, double nonce, String toAddress, 
+                                         double amount, double gasLimit, double gasPrice, 
+                                         String data, Promise promise) {
         try {
             Account acc = this.getAccount();
+            Address fromAddress = acc.getAddress();
             BigInt chain = new BigInt(this.getNodeConfig().getEthereumNetworkID());
             Context ctx = new Context();
+
+            if (nonce == -1) {
+              nonce = this.getNode().getEthereumClient().getPendingNonceAt(ctx, fromAddress);
+            }
 
             Transaction tx = new Transaction(
                 Math.round(nonce), 
@@ -492,6 +464,22 @@ public class RNGethModule extends ReactContextBaseJavaModule {
 
         } catch (Exception e) {
             promise.reject(SUGGEST_GAS_PRICE_ERROR, e);
+        }
+    }
+
+    // Gets this account's pending nonce. This is the nonce you should use when creating a transaction.
+    // return double nonce
+    @ReactMethod
+    public void getPendingNonce(Promise promise) {
+        try {
+            Account acc = this.getAccount();
+            Context ctx = new Context();
+            Address address = acc.getAddress();
+            long nonce = this.getNode().getEthereumClient().getPendingNonceAt(ctx, address);
+
+            promise.resolve((double) nonce);
+        } catch (Exception e) {
+            promise.reject(GET_NONCE_ERROR, e);
         }
     }
 }
