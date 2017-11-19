@@ -434,7 +434,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
             }
 
             Transaction tx = new Transaction(
-                Math.round(nonce), 
+                (long) nonce, 
                 new Address(toAddress),
                 new BigInt((long) amount),
                 new BigInt((long) gasLimit), 
