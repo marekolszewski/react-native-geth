@@ -510,13 +510,13 @@ public class RNGethModule extends ReactContextBaseJavaModule {
      * Retrieves number of pending transactions
      *
      * @param promise Promise
-     * @return Return int 
+     * @return Return long
      */
     @ReactMethod
     public void getPendingTransactionCount(Promise promise) {
         try {
             Context ctx = new Context();
-            int count = GethHolder.getNode().getEthereumClient().getPendingTransactionCount(ctx);
+            long count = GethHolder.getNode().getEthereumClient().getPendingTransactionCount(ctx);
             promise.resolve(count);
         } catch (Exception e) {
             promise.reject(GET_PENDING_TRANSACTION_COUNT_ERROR, e);
