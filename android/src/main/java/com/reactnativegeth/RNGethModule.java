@@ -499,7 +499,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
         try {
             Context ctx = new Context();
             Transaction tx = GethHolder.getNode().getEthereumClient()
-                    .getTransactionByHash(ctx, Hash(hash));
+                    .getTransactionByHash(ctx, Hash.newHashFromHex(hash));
             promise.resolve(tx.toString());
         } catch (Exception e) {
             promise.reject(GET_TRANSACTION_BY_HASH_ERROR, e);
