@@ -480,7 +480,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
             Transaction signed = GethHolder.getKeyStore().signTxPassphrase(acc, passphrase, tx, chain);
             // Send it out to the network.
             GethHolder.getNode().getEthereumClient().sendTransaction(ctx, signed);
-            promise.resolve(tx.getHash());
+            promise.resolve(tx.getHash().getHex());
         } catch (Exception e) {
             promise.reject(NEW_TRANSACTION_ERROR, e);
         }
