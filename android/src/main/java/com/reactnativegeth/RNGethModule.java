@@ -30,7 +30,6 @@ import org.ethereum.geth.Node;
 import org.ethereum.geth.NodeConfig;
 import org.ethereum.geth.SyncProgress;
 import org.ethereum.geth.Transaction;
-import org.ethereum.geth.Hash;
 
 public class RNGethModule extends ReactContextBaseJavaModule {
 
@@ -499,7 +498,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
         try {
             Context ctx = new Context();
             Transaction tx = GethHolder.getNode().getEthereumClient()
-                    .getTransactionByHash(ctx, Hash.newHashFromHex(hash));
+                    .getTransactionByHash(ctx, Geth.newHashFromHex(hash));
             promise.resolve(tx.toString());
         } catch (Exception e) {
             promise.reject(GET_TRANSACTION_BY_HASH_ERROR, e);
