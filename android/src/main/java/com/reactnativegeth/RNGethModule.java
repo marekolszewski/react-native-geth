@@ -52,6 +52,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
     private static final String GET_NONCE_ERROR = "GET_NONCE_ERROR";
     private static final String NEW_TRANSACTION_ERROR = "NEW_TRANSACTION_ERROR";
     private static final String GET_TRANSACTION_BY_HASH_ERROR = "GET_TRANSACTION_BY_HASH_ERROR";
+    private static final String GET_PENDING_TRANSACTION_COUNT_ERROR = "GET_PENDING_TRANSACTION_COUNT_ERROR";
     private static final String SUGGEST_GAS_PRICE_ERROR = "SUGGEST_GAS_PRICE_ERROR";
     private static final String ETH_DIR = ".ethereum";
     private static final String KEY_STORE_DIR = "keystore";
@@ -502,6 +503,23 @@ public class RNGethModule extends ReactContextBaseJavaModule {
             promise.resolve(tx.toString());
         } catch (Exception e) {
             promise.reject(GET_TRANSACTION_BY_HASH_ERROR, e);
+        }
+    }
+
+    /**
+     * Retrieves number of pending transactions
+     *
+     * @param promise Promise
+     * @return Return int 
+     */
+    @ReactMethod
+    public void getPendingTransactionCount(Promise promise) {
+        try {
+            Context ctx = new Context();
+            int count = GethHolder.getNode().getEthereumClient().getPendingTransactionCount(ctx);
+            promise.resolve(count);
+        } catch (Exception e) {
+            promise.reject(GET_PENDING_TRANSACTION_COUNT_ERROR, e);
         }
     }
 
