@@ -30,6 +30,7 @@ import org.ethereum.geth.Node;
 import org.ethereum.geth.NodeConfig;
 import org.ethereum.geth.SyncProgress;
 import org.ethereum.geth.Transaction;
+import org.ethereum.geth.newHashFromHex;
 
 public class RNGethModule extends ReactContextBaseJavaModule {
 
