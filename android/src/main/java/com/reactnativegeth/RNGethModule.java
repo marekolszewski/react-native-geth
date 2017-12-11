@@ -51,7 +51,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
     private static final String GET_ACCOUNTS_ERROR = "GET_ACCOUNTS_ERROR";
     private static final String GET_NONCE_ERROR = "GET_NONCE_ERROR";
     private static final String NEW_TRANSACTION_ERROR = "NEW_TRANSACTION_ERROR";
-    private static final String GET_TRANSACTION_HASH_ERROR = "GET_TRANSACTION_HASH_ERROR";
+    private static final String GET_TRANSACTION_BY_HASH_ERROR = "GET_TRANSACTION_BY_HASH_ERROR";
     private static final String SUGGEST_GAS_PRICE_ERROR = "SUGGEST_GAS_PRICE_ERROR";
     private static final String ETH_DIR = ".ethereum";
     private static final String KEY_STORE_DIR = "keystore";
@@ -480,7 +480,7 @@ public class RNGethModule extends ReactContextBaseJavaModule {
             Transaction signed = GethHolder.getKeyStore().signTxPassphrase(acc, passphrase, tx, chain);
             // Send it out to the network.
             GethHolder.getNode().getEthereumClient().sendTransaction(ctx, signed);
-            promise.resolve(tx.hash());
+            promise.resolve(tx.getHash());
         } catch (Exception e) {
             promise.reject(NEW_TRANSACTION_ERROR, e);
         }
@@ -494,14 +494,14 @@ public class RNGethModule extends ReactContextBaseJavaModule {
      * @return Return string
      */
     @ReactMethod
-    public void getTransactionHash(String hash, Promise promise) {
+    public void getTransactionByHash(String hash, Promise promise) {
         try {
             Context ctx = new Context();
-            Transaction tx = GethHolder.getNode().getEthereumClient().getTransactionHash(ctx, hash);
+            Transaction tx = GethHolder.getNode().getEthereumClient().getTransactionByHash(ctx, hash);
 
             promise.resolve(tx.toString());
         } catch (Exception e) {
-            promise.reject(GET_TRANSACTION_HASH_ERROR, e);
+            promise.reject(GET_TRANSACTION_BY_HASH_ERROR, e);
         }
     }
 
